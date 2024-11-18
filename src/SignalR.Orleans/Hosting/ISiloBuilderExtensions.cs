@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
-using Orleans.Runtime;
 using SignalR.Orleans;
 
 // ReSharper disable once CheckNamespace
@@ -15,32 +14,32 @@ public static class ISiloBuilderExtensions
 
         cfg.ConfigureBuilder?.Invoke(builder);
 
-        try
-        {
-            builder.AddMemoryGrainStorage(SignalROrleansConstants.PUBSUB_STORAGE_PROVIDER); // "ORLEANS_SIGNALR_PUBSUB_PROVIDER"
-        }
-        catch
-        {
-            /** PubSubStore was already added. Do nothing. **/
-        }
+        //try
+        //{
+        //    builder.AddMemoryGrainStorage(SignalROrleansConstants.PUBSUB_STORAGE_PROVIDER); // "ORLEANS_SIGNALR_PUBSUB_PROVIDER"
+        //}
+        //catch
+        //{
+        //    /** PubSubStore was already added. Do nothing. **/
+        //}
 
-        try
-        {
-            builder.AddMemoryGrainStorage(SignalROrleansConstants.SIGNALR_ORLEANS_STORAGE_PROVIDER); // "ORLEANS_SIGNALR_STORAGE_PROVIDER"
-        }
-        catch
-        {
-            /** Grain storage provider was already added. Do nothing. **/
-        }
+        //try
+        //{
+        //    builder.AddMemoryGrainStorage(SignalROrleansConstants.SIGNALR_ORLEANS_STORAGE_PROVIDER); // "ORLEANS_SIGNALR_STORAGE_PROVIDER"
+        //}
+        //catch
+        //{
+        //    /** Grain storage provider was already added. Do nothing. **/
+        //}
 
-        try
-        {
-            builder.AddMemoryStreams(SignalROrleansConstants.SIGNALR_ORLEANS_STREAM_PROVIDER); // "ORLEANS_SIGNALR_STREAM_PROVIDER"
-        }
-        catch
-        {
+        //try
+        //{
+        //    builder.AddMemoryStreams(SignalROrleansConstants.SIGNALR_ORLEANS_STREAM_PROVIDER); // "ORLEANS_SIGNALR_STREAM_PROVIDER"
+        //}
+        //catch
+        //{
 
-        }
+        //}
 
         return builder;
     }
