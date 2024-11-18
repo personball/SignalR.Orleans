@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Orleans.Runtime;
 using Orleans.Streams;
 using Orleans.Timers;
 
@@ -36,12 +35,11 @@ internal sealed class ServerDirectoryGrain : IGrainBase, IServerDirectoryGrain
         _logger.LogInformation("Available servers {serverIds}",
             string.Join(", ", _state.State.ServerHeartBeats?.Count > 0 ? string.Join(", ", _state.State.ServerHeartBeats) : "empty"));
 
-        _timerRegistry.RegisterTimer(
+        _timerRegistry.RegisterGrainTimer(
             this.GrainContext,
             ValidateAndCleanUp,
             _state.State,
-            TimeSpan.FromSeconds(15),
-            TimeSpan.FromMinutes(SERVERDIRECTORY_CLEANUP_IN_MINUTES));
+            new GrainTimerCreationOptions(TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(SERVERDIRECTORY_CLEANUP_IN_MINUTES)));
 
         return Task.CompletedTask;
     }
@@ -62,7 +60,7 @@ internal sealed class ServerDirectoryGrain : IGrainBase, IServerDirectoryGrain
         await _state.WriteStateAsync();
     }
 
-    private async Task ValidateAndCleanUp(object serverDirectory)
+    private async Task ValidateAndCleanUp(ServerDirectoryState serverDirectory, CancellationToken ct)
     {
         var inactiveTime = DateTime.UtcNow.AddMinutes(-SERVERDIRECTORY_CLEANUP_IN_MINUTES);
         var expiredHeartBeats = _state.State.ServerHeartBeats.Where(heartBeat => heartBeat.Value < inactiveTime).ToList();

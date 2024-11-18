@@ -33,7 +33,14 @@ public static class ISiloBuilderExtensions
             /** Grain storage provider was already added. Do nothing. **/
         }
 
-        builder.AddMemoryStreams(SignalROrleansConstants.SIGNALR_ORLEANS_STREAM_PROVIDER); // "ORLEANS_SIGNALR_STREAM_PROVIDER"
+        try
+        {
+            builder.AddMemoryStreams(SignalROrleansConstants.SIGNALR_ORLEANS_STREAM_PROVIDER); // "ORLEANS_SIGNALR_STREAM_PROVIDER"
+        }
+        catch
+        {
+
+        }
 
         return builder;
     }
